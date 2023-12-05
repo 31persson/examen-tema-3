@@ -50,7 +50,7 @@ public:
         if (it == symbolTable.end()) {
             symbolTable[name] = value;
         } else {
-            throw std::runtime_error("Símbolo '" + name + "' ya existe en el entorno.");
+            throw std::runtime_error("Simbolo '" + name + "' ya existe en el entorno.");
         }
     }
 
@@ -59,7 +59,7 @@ public:
         if (it != symbolTable.end()) {
             return it->second;
         } else {
-            throw std::runtime_error("Símbolo '" + name + "' no encontrado en el entorno.");
+            throw std::runtime_error("Simbolo '" + name + "' no encontrado en el entorno.");
         }
     }
 
@@ -68,7 +68,7 @@ public:
         if (it != symbolTable.end()) {
             symbolTable.erase(it);
         } else {
-            throw std::runtime_error("No se puede eliminar. Símbolo '" + name + "' no encontrado en el entorno.");
+            throw std::runtime_error("No se puede eliminar. Simbolo '" + name + "' no encontrado en el entorno.");
         }
     }
 
@@ -89,17 +89,17 @@ int main() {
         // Insertar variable con manejo de excepciones
         env.insert("newVariable", Variant(42));
 
-        // Verificar si un símbolo existe
+        // Verificar si un simbolo existe
         if (env.exists("playerScore")) {
-            std::cout << "El símbolo 'playerScore' existe en el entorno." << std::endl;
+            std::cout << "El simbolo 'playerScore' existe en el entorno." << std::endl;
         } else {
-            std::cout << "El símbolo 'playerScore' no existe en el entorno." << std::endl;
+            std::cout << "El simbolo 'playerScore' no existe en el entorno." << std::endl;
         }
 
-        // Eliminar un símbolo
+        // Eliminar un simbolo
         env.remove("playerScore");
 
-        // Intentar obtener un símbolo eliminado
+        // Intentar obtener un simbolo eliminado
         Variant deletedSymbol = env.lookup("playerScore");
     } catch (const std::exception& e) {
         std::cerr << "Error: " << e.what() << std::endl;
