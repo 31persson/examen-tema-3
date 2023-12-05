@@ -44,15 +44,31 @@ public:
     void setVariable(const std::string& name, const Variant& value) {
         symbolTable[name] = value;
     }
+
+    // Método para insertar nuevos símbolos sin conflictos
+    void insert(const std::string& name, const Variant& value) {
+        auto it = symbolTable.find(name);
+        if (it == symbolTable.end()) {
+            // El símbolo no existe, podemos insertarlo
+            symbolTable[name] = value;
+        } else {
+            std::cerr << "Símbolo '" << name << "' ya existe en el entorno." << std::endl;
+            // Puedes manejar el conflicto de alguna manera, como lanzar una excepción
+            // o actualizar el valor del símbolo existente, dependiendo de tus necesidades.
+        }
+    }
 };
 
 int main() {
     Environment env;
 
-    env.setVariable("playerScore", Variant(100));
+    env.insert("playerScore", Variant(100)); // Insertar un nuevo símbolo
 
     Variant score = env.getVariable("playerScore");
     std::cout << "Player Score: " << score.get<Variant::IntType>() << std::endl;
+
+    // Intentar insertar el mismo símbolo nuevamente
+    env.insert("playerScore", Variant(200));
 
     return 0;
 }
