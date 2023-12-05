@@ -2,6 +2,7 @@
 #include <map>
 #include <string>
 #include <variant>
+#include <stdexcept>
 
 class Variant {
 public:
@@ -36,8 +37,7 @@ public:
         if (it != symbolTable.end()) {
             return it->second;
         } else {
-            std::cerr << "Variable '" << name << "' no encontrada en el entorno." << std::endl;
-            return Variant();
+            throw std::runtime_error("Variable '" + name + "' no encontrada en el entorno.");
         }
     }
 
@@ -50,34 +50,37 @@ public:
         if (it == symbolTable.end()) {
             symbolTable[name] = value;
         } else {
-            std::cerr << "Símbolo '" << name << "' ya existe en el entorno." << std::endl;
+            throw std::runtime_error("Símbolo '" + name + "' ya existe en el entorno.");
         }
     }
 
-    // Método para buscar símbolos en el entorno
     Variant lookup(const std::string& name) const {
         auto it = symbolTable.find(name);
         if (it != symbolTable.end()) {
             return it->second;
         } else {
-            // Manejo de casos en los que el símbolo no existe
-            std::cerr << "Símbolo '" << name << "' no encontrado en el entorno." << std::endl;
-            // Puedes devolver un valor predeterminado o lanzar una excepción según tus necesidades.
-            return Variant();
+            throw std::runtime_error("Símbolo '" + name + "' no encontrado en el entorno.");
         }
     }
 };
 
 int main() {
-    Environment env;
+    try {
+        Environment env;
 
-    env.insert("playerScore", Variant(100));
+        env.insert("playerScore", Variant(100));
 
-    Variant score = env.lookup("playerScore"); // Cambiado a lookup
-    std::cout << "Player Score: " << score.get<Variant::IntType>() << std::endl;
+        Variant score = env.lookup("playerScore");
+        std::cout << "Player Score: " << score.get<Variant::IntType>() << std::endl;
 
-    // Intentar buscar un símbolo que no existe
-    Variant nonExistent = env.lookup("nonExistentSymbol");
+        // Intentar buscar un símbolo que no existe
+        Variant nonExistent = env.lookup("nonExistentSymbol");
+
+        // Intentar insertar un símbolo que ya existe
+        env.insert("playerScore", Variant(200));
+    } catch (const std::exception& e) {
+        std::cerr << "Error: " << e.what() << std::endl;
+    }
 
     return 0;
 }
