@@ -52,7 +52,7 @@ public:
             // El símbolo no existe, podemos insertarlo
             symbolTable[name] = value;
         } else {
-            std::cerr << "Símbolo '" << name << "' ya existe en el entorno." << std::endl;
+            std::cerr << "Simbolo '" << name << "' ya existe en el entorno." << std::endl;
             // Puedes manejar el conflicto de alguna manera, como lanzar una excepción
             // o actualizar el valor del símbolo existente, dependiendo de tus necesidades.
         }
