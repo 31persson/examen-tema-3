@@ -45,16 +45,25 @@ public:
         symbolTable[name] = value;
     }
 
-    // Método para insertar nuevos símbolos sin conflictos
     void insert(const std::string& name, const Variant& value) {
         auto it = symbolTable.find(name);
         if (it == symbolTable.end()) {
-            // El símbolo no existe, podemos insertarlo
             symbolTable[name] = value;
         } else {
-            std::cerr << "Simbolo '" << name << "' ya existe en el entorno." << std::endl;
-            // Puedes manejar el conflicto de alguna manera, como lanzar una excepción
-            // o actualizar el valor del símbolo existente, dependiendo de tus necesidades.
+            std::cerr << "Símbolo '" << name << "' ya existe en el entorno." << std::endl;
+        }
+    }
+
+    // Método para buscar símbolos en el entorno
+    Variant lookup(const std::string& name) const {
+        auto it = symbolTable.find(name);
+        if (it != symbolTable.end()) {
+            return it->second;
+        } else {
+            // Manejo de casos en los que el símbolo no existe
+            std::cerr << "Símbolo '" << name << "' no encontrado en el entorno." << std::endl;
+            // Puedes devolver un valor predeterminado o lanzar una excepción según tus necesidades.
+            return Variant();
         }
     }
 };
@@ -62,13 +71,13 @@ public:
 int main() {
     Environment env;
 
-    env.insert("playerScore", Variant(100)); // Insertar un nuevo símbolo
+    env.insert("playerScore", Variant(100));
 
-    Variant score = env.getVariable("playerScore");
+    Variant score = env.lookup("playerScore"); // Cambiado a lookup
     std::cout << "Player Score: " << score.get<Variant::IntType>() << std::endl;
 
-    // Intentar insertar el mismo símbolo nuevamente
-    env.insert("playerScore", Variant(200));
+    // Intentar buscar un símbolo que no existe
+    Variant nonExistent = env.lookup("nonExistentSymbol");
 
     return 0;
 }
